@@ -48,7 +48,7 @@ function snakePositions(state = [], action) {
 function maxSnakeLength(state = 5, action) {
     switch(action.type) {
         case actions.INCREASE_SNAKE_LENGTH:
-            return state + 1;
+            return state + action.increment;
         default:
             return state;
     }

@@ -33,8 +33,9 @@ export const moveToPosition = (position, cutOffTail) => ({
     cutOffTail
 });
 
-export const increaseLength = () => ({
-    type: INCREASE_SNAKE_LENGTH
+export const increaseLength = (increment = 1) => ({
+    type: INCREASE_SNAKE_LENGTH,
+    increment
 });
 
 export const setTreasurePosition = (position) => ({
@@ -95,13 +96,17 @@ function getNewHeadPosition(snakePositions, direction) {
 
 export const advance = () => (
     function(dispatch, getState) { // change to lambda?
-        const { maxSnakeLength, snakePositions, snakeDirection } = getState();
+        const { maxSnakeLength, snakePositions, snakeDirection, treasurePosition } = getState();
         const newHeadPosition = getNewHeadPosition(snakePositions, snakeDirection);
         if(hitSomething(snakePositions, newHeadPosition)) {
             console.log('GAME OVER!');
             dispatch(gameOver());
         } else {
             dispatch(moveToPosition(newHeadPosition, snakePositions.length >= maxSnakeLength));
+            if(newHeadPosition.x === treasurePosition.x && newHeadPosition.y === treasurePosition.y) {
+                placeTreasure(dispatch, getState);
+                dispatch(increaseLength(5));
+            }
         }
     }
 );
@@ -109,7 +114,7 @@ export const advance = () => (
 const nextFrame = (dispatch, getState, startTime = Date.now()) => {
     const currentTime = Date.now();
     const { playing } = getState();
-    if (playing && currentTime - startTime >= 250) {
+    if (playing && currentTime - startTime >= 150) {
         startTime = currentTime;
         dispatch(advance());
     }
@@ -128,6 +133,7 @@ export const move = (direction) => (
         }
     }
 )
+
 export const initGame = () => (
     function(dispatch, getState) {
         window.addEventListener('keydown', (e) => {
