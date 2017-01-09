@@ -1,21 +1,24 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React from 'react';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { Provider } from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
+import rootReducer from './reducers';
+import Game from './components/Game';
+//import logo from './logo.svg';
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
+
+ const middleware = [ thunkMiddleware ];
+ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(...middleware)));
+//const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+
+const App = () => (
+	<Provider store={store}>
+		<div>
+			<Game />
+		</div>
+	</Provider>
+);
 
 export default App;

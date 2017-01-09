@@ -22,3 +22,12 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+td div {
+  width: 20px;
+  height: 20px;
+}
+
+td.snake {
+  background-color: black;
+}
