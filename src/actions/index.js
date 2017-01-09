@@ -111,14 +111,25 @@ export const advance = () => (
     }
 );
 
-const nextFrame = (dispatch, getState, startTime = Date.now()) => {
+let animationFrame;
+const nextFrame = (dispatch, getState, startTime) => {
+    console.log('nextFrame')//, dispatch, getState, startTime);
     const currentTime = Date.now();
     const { playing } = getState();
-    if (playing && currentTime - startTime >= 150) {
-        startTime = currentTime;
-        dispatch(advance());
+    if(!playing) {
+        return;
     }
-    requestAnimationFrame((nextFrame.bind(this, dispatch, getState, startTime)));
+
+    if(startTime === undefined || currentTime - startTime >= 150) {
+        if(animationFrame && startTime === undefined) {
+            console.log('cancelling')
+            cancelAnimationFrame(animationFrame);
+        }
+        dispatch(advance());
+        startTime = currentTime;
+    }
+    animationFrame = requestAnimationFrame(nextFrame.bind(this, dispatch, getState, startTime));
+    console.log('frame is ' + animationFrame)
 };
 
 export const move = (direction) => (
@@ -126,10 +137,7 @@ export const move = (direction) => (
         const { playing, moves } = getState();
         if(playing) {
             dispatch(setDirection(direction));
-            if(moves === 0) {
-                console.log('Kicking off animation');
-                nextFrame(dispatch, getState)
-            }
+            nextFrame(dispatch, getState)
         }
     }
 )
