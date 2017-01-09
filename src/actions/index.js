@@ -32,7 +32,6 @@ export const moveToPosition = (position, cutOffTail) => ({
 });
 
 function hitSomething(snakePositions, newHeadPosition) {
-    console.log('hitSomething?', arguments);
     const hitTheWall = newHeadPosition.x < 0 || newHeadPosition.x >= constants.BOARD_WIDTH || newHeadPosition.y < 0 || newHeadPosition.y >= constants.BOARD_HEIGHT;
     const hitSelf = snakePositions.findIndex(p => p.x === newHeadPosition.x && p.y === newHeadPosition.y) > -1;
     return hitTheWall || hitSelf;
@@ -73,12 +72,25 @@ export const advance = () => (
     }
 );
 
+const nextFrame = (dispatch, getState, startTime = Date.now()) => {
+    const currentTime = Date.now();
+    const { playing } = getState();
+    if (playing && currentTime - startTime >= 400) {
+        startTime = currentTime;
+        dispatch(advance());
+    }
+    requestAnimationFrame((nextFrame.bind(this, dispatch, getState, startTime)));
+};
+
 export const move = (direction) => (
     function(dispatch, getState) {
-        const { playing } = getState();
+        const { playing, moves } = getState();
         if(playing) {
             dispatch(setDirection(direction));
-            dispatch(advance());
+            if(moves === 0) {
+                console.log('Kicking off animation');
+                nextFrame(dispatch, getState)
+            }
         }
     }
 )
