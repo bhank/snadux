@@ -6,7 +6,7 @@ const GameBoard = ({ grid }) => {
     let tableRows = grid.map((gridRow, rowIndex) => (
         <tr key={`row${rowIndex}`}>
             {gridRow.map((gridCol, colIndex) => (
-                <td key={`col${colIndex}`} className={gridCol ? 'snake' : 'empty'}><div></div></td>)
+                <td key={`col${colIndex}`} className={gridCol}><div></div></td>)
             )}
         </tr>
     ));
@@ -22,9 +22,9 @@ const GameBoard = ({ grid }) => {
 function snakePositionsToGrid(snakePositions) {
     let grid = [];
     for(var y = 0; y < constants.BOARD_HEIGHT; y++) {
-        grid.push(new Array(constants.BOARD_WIDTH).fill(false));
+        grid.push(new Array(constants.BOARD_WIDTH).fill(null));
     }
-    snakePositions.forEach(p => grid[p.y][p.x] = true);
+    snakePositions.forEach(p => grid[p.y][p.x] = 'snake');
     return grid;
 }
 
