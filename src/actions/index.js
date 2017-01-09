@@ -25,37 +25,6 @@ export const setDirection = (direction) => ({
     direction
 });
 
-export const initGame = () => (
-    function(dispatch) {
-        window.addEventListener('keydown', (e) => {
-            switch(e.keyCode) {
-                case 37:
-                    e.preventDefault();
-                    dispatch(setDirection(DIRECTION_W));
-                    dispatch(advance());
-                    break;
-                case 38:
-                    e.preventDefault();
-                    dispatch(setDirection(DIRECTION_N));
-                    dispatch(advance());
-                    break;
-                case 39:
-                    e.preventDefault();
-                    dispatch(setDirection(DIRECTION_E));
-                    dispatch(advance());
-                    break;
-                case 40:
-                    e.preventDefault();
-                    dispatch(setDirection(DIRECTION_S));
-                    dispatch(advance());
-                    break;
-                default:
-            }
-        });
-        dispatch(startGame());
-    }
-);
-
 export const moveToPosition = (position, cutOffTail) => ({
     type: MOVE_TO_POSITION,
     position,
@@ -105,8 +74,38 @@ export const advance = () => (
 );
 
 export const move = (direction) => (
+    function(dispatch, getState) {
+        const { playing } = getState();
+        if(playing) {
+            dispatch(setDirection(direction));
+            dispatch(advance());
+        }
+    }
+)
+export const initGame = () => (
     function(dispatch) {
-        dispatch(setDirection(direction));
-        dispatch(advance);
+        window.addEventListener('keydown', (e) => {
+            let direction;
+            switch(e.keyCode) {
+                case 37:
+                    direction = DIRECTION_W;
+                    break;
+                case 38:
+                    direction = DIRECTION_N;
+                    break;
+                case 39:
+                    direction = DIRECTION_E;
+                    break;
+                case 40:
+                    direction = DIRECTION_S;
+                    break;
+                default:
+            }
+            if(direction) {
+                e.preventDefault();
+                dispatch(move(direction));
+            }
+        });
+        dispatch(startGame());
     }
 );
