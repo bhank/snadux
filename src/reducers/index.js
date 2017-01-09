@@ -47,6 +47,8 @@ function snakePositions(state = [], action) {
 
 function maxSnakeLength(state = 5, action) {
     switch(action.type) {
+        case actions.START_GAME:
+            return 5;
         case actions.INCREASE_SNAKE_LENGTH:
             return state + action.increment;
         default:
@@ -65,7 +67,7 @@ function treasurePosition(state = null, action) {
 
 function score(state = 0, action) {
     switch(action.type) {
-        case actions.INIT_GAME:
+        case actions.START_GAME:
             return 0;
         case actions.INCREMENT_SCORE:
             return state + 1;

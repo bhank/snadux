@@ -19,6 +19,13 @@ export const startGame = () => ({
     type: START_GAME
 });
 
+export const restartGame = () => (dispatch) => {
+    if(animationFrame) {
+        window.cancelAnimationFrame(animationFrame);
+    }
+    dispatch(startGame());
+};
+
 export const gameOver = () => ({
     type: GAME_OVER
 });

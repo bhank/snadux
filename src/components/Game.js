@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { initGame } from '../actions';
 import GameBoard from './GameBoard';
 import ScoreBoard from './ScoreBoard';
+import ControlPanel from './ControlPanel';
 
 class Game extends React.Component {
     componentDidMount() {
@@ -16,6 +17,9 @@ class Game extends React.Component {
                 </div>
                 <div>
                     <ScoreBoard/>
+                </div>
+                <div>
+                    <ControlPanel/>
                 </div>
             </div>
         );
