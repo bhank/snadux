@@ -54,10 +54,20 @@ function maxSnakeLength(state = 5, action) {
     }
 }
 
+function treasurePosition(state = null, action) {
+    switch(action.type) {
+        case actions.SET_TREASURE_POSITION:
+            return action.position;
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     playing,
     moves,
     snakeDirection,
     snakePositions,
-    maxSnakeLength
+    maxSnakeLength,
+    treasurePosition
 });

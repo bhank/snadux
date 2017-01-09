@@ -4,6 +4,7 @@ export const SET_DIRECTION = 'SET_DIRECTION';
 export const SET_SNAKE_ALIVE = 'SET_SNAKE_ALIVE';
 export const MOVE_TO_POSITION = 'MOVE_TO_POSITION';
 export const INCREASE_SNAKE_LENGTH = 'INCREASE_SNAKE_LENGTH';
+export const SET_TREASURE_POSITION = 'SET_TREASURE_POSITION';
 export const INIT_GAME = 'INIT_GAME';
 export const START_GAME = 'START_GAME';
 export const GAME_OVER = 'GAME_OVER';
@@ -35,6 +36,34 @@ export const moveToPosition = (position, cutOffTail) => ({
 export const increaseLength = () => ({
     type: INCREASE_SNAKE_LENGTH
 });
+
+export const setTreasurePosition = (position) => ({
+    type: SET_TREASURE_POSITION,
+    position
+});
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+// Returns a random integer between min (included) and max (excluded)
+// Using Math.round() will give you a non-uniform distribution!
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+const placeTreasure = (dispatch, getState) => {
+    const { snakePositions } = getState();
+    let treasurePosition;
+    do {
+        treasurePosition = {
+            x: getRandomInt(0, constants.BOARD_WIDTH),
+            y: getRandomInt(0, constants.BOARD_HEIGHT)
+        };
+        console.log('Place treasure here?', treasurePosition);
+    } while (snakePositions.findIndex(p => p.x === treasurePosition.x && p.y === treasurePosition.y) > -1);
+
+    dispatch(setTreasurePosition(treasurePosition));
+};
 
 function hitSomething(snakePositions, newHeadPosition) {
     const hitTheWall = newHeadPosition.x < 0 || newHeadPosition.x >= constants.BOARD_WIDTH || newHeadPosition.y < 0 || newHeadPosition.y >= constants.BOARD_HEIGHT;
@@ -100,7 +129,7 @@ export const move = (direction) => (
     }
 )
 export const initGame = () => (
-    function(dispatch) {
+    function(dispatch, getState) {
         window.addEventListener('keydown', (e) => {
             let direction;
             switch(e.keyCode) {
@@ -123,6 +152,7 @@ export const initGame = () => (
                 dispatch(move(direction));
             }
         });
+        placeTreasure(dispatch, getState);
         dispatch(startGame());
     }
 );

@@ -36,6 +36,10 @@ td.snake {
   background-color: black;
 }
 
+td.treasure {
+  background-color: gold;
+}
+
 table {
   border: 1px solid black;
 }

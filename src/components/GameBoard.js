@@ -19,18 +19,21 @@ const GameBoard = ({ grid }) => {
     );
 }
 
-function snakePositionsToGrid(snakePositions) {
+function getGrid(snakePositions, treasurePosition) {
     let grid = [];
     for(var y = 0; y < constants.BOARD_HEIGHT; y++) {
         grid.push(new Array(constants.BOARD_WIDTH).fill(null));
     }
     snakePositions.forEach(p => grid[p.y][p.x] = 'snake');
+    if(treasurePosition) {
+        grid[treasurePosition.y][treasurePosition.x] = 'treasure';
+    }
     return grid;
 }
 
 function mapStateToProps(state) {
     return {
-        grid: snakePositionsToGrid(state.snakePositions)
+        grid: getGrid(state.snakePositions, state.treasurePosition)
     };
 }
 
