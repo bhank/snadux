@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { initGame } from '../actions';
+import Banner from './Banner';
 import GameBoard from './GameBoard';
 import ScoreBoard from './ScoreBoard';
 import ControlPanel from './ControlPanel';
@@ -12,15 +13,10 @@ class Game extends React.Component {
     render() {
         return (
             <div>
-                <div>
-                    <GameBoard/>
-                </div>
-                <div>
-                    <ScoreBoard/>
-                </div>
-                <div>
-                    <ControlPanel/>
-                </div>
+                <Banner/>
+                <GameBoard/>
+                <ScoreBoard/>
+                <ControlPanel/>
             </div>
         );
     }

@@ -11,11 +11,13 @@ const GameBoard = ({ grid }) => {
         </tr>
     ));
     return (
-        <table width={constants.BOARD_WIDTH} height={constants.BOARD_WIDTH}>
-            <tbody>
-                {tableRows}
-            </tbody>
-        </table>
+        <div>
+            <table width={constants.BOARD_WIDTH} height={constants.BOARD_WIDTH}>
+                <tbody>
+                    {tableRows}
+                </tbody>
+            </table>
+        </div>
     );
 }
 
