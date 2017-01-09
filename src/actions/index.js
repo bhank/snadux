@@ -8,6 +8,8 @@ export const INCREMENT_SCORE = 'INCREMENT_SCORE';
 export const SET_TREASURE_POSITION = 'SET_TREASURE_POSITION';
 export const INIT_GAME = 'INIT_GAME';
 export const START_GAME = 'START_GAME';
+export const PAUSE_GAME = 'PAUSE_GAME';
+export const UNPAUSE_GAME = 'UNPAUSE_GAME';
 export const GAME_OVER = 'GAME_OVER';
 
 export const DIRECTION_N = 'DIRECTION_N';
@@ -19,12 +21,13 @@ export const startGame = () => ({
     type: START_GAME
 });
 
-export const restartGame = () => (dispatch) => {
-    if(animationFrame) {
-        window.cancelAnimationFrame(animationFrame);
-    }
-    dispatch(startGame());
-};
+export const pauseGame = () => ({
+    type: PAUSE_GAME
+});
+
+export const unpauseGame = () => ({
+    type: UNPAUSE_GAME
+});
 
 export const gameOver = () => ({
     type: GAME_OVER
@@ -131,8 +134,8 @@ export const advance = () => (
 let animationFrame;
 const nextFrame = (dispatch, getState, startTime) => {
     const currentTime = Date.now();
-    const { playing } = getState();
-    if(!playing) {
+    const { status } = getState();
+    if(status !== constants.STATUS_PLAYING) {
         return;
     }
 
@@ -147,12 +150,30 @@ const nextFrame = (dispatch, getState, startTime) => {
     console.log('frame is ' + animationFrame)
 };
 
+export const restartGame = () => (dispatch, getState) => {
+    if(animationFrame) {
+        window.cancelAnimationFrame(animationFrame);
+    }
+    dispatch(startGame());
+    placeTreasure(dispatch, getState);
+};
+
+export const setPauseState = (newPauseState) => (dispatch, getState) => {
+    const { status } = getState();
+    if((newPauseState === undefined || newPauseState === true) && status === constants.STATUS_PLAYING) {
+        dispatch(pauseGame());
+    } else if((newPauseState === undefined || newPauseState === false) && status === constants.STATUS_PAUSED) {
+        dispatch(unpauseGame());
+        nextFrame(dispatch, getState);
+    }
+};
+
 export const move = (direction) => (
     function(dispatch, getState) {
-        const { playing, moves } = getState();
-        if(playing) {
+        const { status } = getState();
+        if(status === constants.STATUS_PLAYING) {
             dispatch(setDirection(direction));
-            nextFrame(dispatch, getState)
+            nextFrame(dispatch, getState);
         }
     }
 )

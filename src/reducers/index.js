@@ -1,12 +1,16 @@
 import * as actions from '../actions';
+import * as constants from '../constants';
 import { combineReducers } from 'redux';
 
-function playing(state = false, action) {
+function status(state = constants.STATUS_GAME_OVER, action) {
     switch(action.type) {
         case actions.START_GAME:
-            return true;
+        case actions.UNPAUSE_GAME:
+            return constants.STATUS_PLAYING;
+        case actions.PAUSE_GAME:
+            return constants.STATUS_PAUSED;
         case actions.GAME_OVER:
-            return false;
+            return constants.STATUS_GAME_OVER;
         default:
             return state;
     }
@@ -77,7 +81,7 @@ function score(state = 0, action) {
 }
 
 export default combineReducers({
-    playing,
+    status,
     moves,
     snakeDirection,
     snakePositions,
