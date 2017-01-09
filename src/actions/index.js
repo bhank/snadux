@@ -133,12 +133,12 @@ export const advance = () => (
 let animationFrame;
 const nextFrame = (dispatch, getState, startTime) => {
     const currentTime = Date.now();
-    const { status } = getState();
-    if(status !== constants.STATUS_PLAYING) {
-        return;
-    }
 
     if(startTime === undefined || currentTime - startTime >= 150) {
+        const { status } = getState();
+        if(status !== constants.STATUS_PLAYING) {
+            return;
+        }
         if(animationFrame && startTime === undefined) {
             cancelAnimationFrame(animationFrame);
         }
