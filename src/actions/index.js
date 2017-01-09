@@ -75,7 +75,6 @@ const placeTreasure = (dispatch, getState) => {
             x: getRandomInt(0, constants.BOARD_WIDTH),
             y: getRandomInt(0, constants.BOARD_HEIGHT)
         };
-        console.log('Place treasure here?', treasurePosition);
     } while (snakePositions.findIndex(p => p.x === treasurePosition.x && p.y === treasurePosition.y) > -1);
 
     dispatch(setTreasurePosition(treasurePosition));
@@ -147,7 +146,6 @@ const nextFrame = (dispatch, getState, startTime) => {
         startTime = currentTime;
     }
     animationFrame = requestAnimationFrame(nextFrame.bind(this, dispatch, getState, startTime));
-    console.log('frame is ' + animationFrame)
 };
 
 export const restartGame = () => (dispatch, getState) => {
