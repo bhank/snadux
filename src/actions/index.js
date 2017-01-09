@@ -4,6 +4,7 @@ export const SET_DIRECTION = 'SET_DIRECTION';
 export const SET_SNAKE_ALIVE = 'SET_SNAKE_ALIVE';
 export const MOVE_TO_POSITION = 'MOVE_TO_POSITION';
 export const INCREASE_SNAKE_LENGTH = 'INCREASE_SNAKE_LENGTH';
+export const INCREMENT_SCORE = 'INCREMENT_SCORE';
 export const SET_TREASURE_POSITION = 'SET_TREASURE_POSITION';
 export const INIT_GAME = 'INIT_GAME';
 export const START_GAME = 'START_GAME';
@@ -43,6 +44,10 @@ export const setTreasurePosition = (position) => ({
     position
 });
 
+export const incrementScore = () => ({
+    type: INCREMENT_SCORE
+});
+
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 // Returns a random integer between min (included) and max (excluded)
 // Using Math.round() will give you a non-uniform distribution!
@@ -64,6 +69,12 @@ const placeTreasure = (dispatch, getState) => {
     } while (snakePositions.findIndex(p => p.x === treasurePosition.x && p.y === treasurePosition.y) > -1);
 
     dispatch(setTreasurePosition(treasurePosition));
+};
+
+const gotTreasure = (dispatch, getState) => {
+    dispatch(incrementScore());
+    placeTreasure(dispatch, getState);
+    dispatch(increaseLength(5));
 };
 
 function hitSomething(snakePositions, newHeadPosition) {
@@ -104,8 +115,7 @@ export const advance = () => (
         } else {
             dispatch(moveToPosition(newHeadPosition, snakePositions.length >= maxSnakeLength));
             if(newHeadPosition.x === treasurePosition.x && newHeadPosition.y === treasurePosition.y) {
-                placeTreasure(dispatch, getState);
-                dispatch(increaseLength(5));
+                gotTreasure(dispatch, getState);
             }
         }
     }
@@ -113,7 +123,6 @@ export const advance = () => (
 
 let animationFrame;
 const nextFrame = (dispatch, getState, startTime) => {
-    console.log('nextFrame')//, dispatch, getState, startTime);
     const currentTime = Date.now();
     const { playing } = getState();
     if(!playing) {
@@ -122,7 +131,6 @@ const nextFrame = (dispatch, getState, startTime) => {
 
     if(startTime === undefined || currentTime - startTime >= 150) {
         if(animationFrame && startTime === undefined) {
-            console.log('cancelling')
             cancelAnimationFrame(animationFrame);
         }
         dispatch(advance());

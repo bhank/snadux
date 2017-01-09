@@ -63,11 +63,23 @@ function treasurePosition(state = null, action) {
     }
 }
 
+function score(state = 0, action) {
+    switch(action.type) {
+        case actions.INIT_GAME:
+            return 0;
+        case actions.INCREMENT_SCORE:
+            return state + 1;
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     playing,
     moves,
     snakeDirection,
     snakePositions,
     maxSnakeLength,
-    treasurePosition
+    treasurePosition,
+    score
 });
