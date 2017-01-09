@@ -3,6 +3,7 @@ import * as constants from '../constants';
 export const SET_DIRECTION = 'SET_DIRECTION';
 export const SET_SNAKE_ALIVE = 'SET_SNAKE_ALIVE';
 export const MOVE_TO_POSITION = 'MOVE_TO_POSITION';
+export const INCREASE_SNAKE_LENGTH = 'INCREASE_SNAKE_LENGTH';
 export const INIT_GAME = 'INIT_GAME';
 export const START_GAME = 'START_GAME';
 export const GAME_OVER = 'GAME_OVER';
@@ -29,6 +30,10 @@ export const moveToPosition = (position, cutOffTail) => ({
     type: MOVE_TO_POSITION,
     position,
     cutOffTail
+});
+
+export const increaseLength = () => ({
+    type: INCREASE_SNAKE_LENGTH
 });
 
 function hitSomething(snakePositions, newHeadPosition) {
@@ -75,7 +80,7 @@ export const advance = () => (
 const nextFrame = (dispatch, getState, startTime = Date.now()) => {
     const currentTime = Date.now();
     const { playing } = getState();
-    if (playing && currentTime - startTime >= 400) {
+    if (playing && currentTime - startTime >= 250) {
         startTime = currentTime;
         dispatch(advance());
     }

@@ -45,9 +45,19 @@ function snakePositions(state = [], action) {
     }
 }
 
+function maxSnakeLength(state = 5, action) {
+    switch(action.type) {
+        case actions.INCREASE_SNAKE_LENGTH:
+            return state + 1;
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     playing,
     moves,
     snakeDirection,
-    snakePositions
+    snakePositions,
+    maxSnakeLength
 });
