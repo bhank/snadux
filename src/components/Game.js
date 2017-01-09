@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { initGame } from '../actions';
 import GameBoard from './GameBoard';
+import ScoreBoard from './ScoreBoard';
 
 class Game extends React.Component {
     componentDidMount() {
@@ -10,7 +11,12 @@ class Game extends React.Component {
     render() {
         return (
             <div>
-                <GameBoard/>
+                <div>
+                    <GameBoard/>
+                </div>
+                <div>
+                    <ScoreBoard/>
+                </div>
             </div>
         );
     }
