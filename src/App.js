@@ -7,7 +7,7 @@ import Game from './components/Game';
 import './App.css';
 
 let store;
-const USE_REDUX_DEVTOOLS = false;
+const USE_REDUX_DEVTOOLS = true;
 if(USE_REDUX_DEVTOOLS) {
   const middleware = [ thunkMiddleware ];
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
